@@ -64,8 +64,32 @@ public int read(byte b[]) throws IOException {
      * @see        java.io.InputStream#read()
      */
 public int read(byte b[], int off, int len) throws IOException {
-	//实现省略
-    return null;
+	if (b == null) {
+            throw new NullPointerException();
+        } else if (off < 0 || len < 0 || len > b.length - off) {
+            throw new IndexOutOfBoundsException();
+        } else if (len == 0) {
+            return 0;
+        }
+
+        int c = read();
+        if (c == -1) {
+            return -1;
+        }
+        b[off] = (byte)c;
+
+        int i = 1;
+        try {
+            for (; i < len ; i++) {
+                c = read();
+                if (c == -1) {
+                    break;
+                }
+                b[off + i] = (byte)c;
+            }
+        } catch (IOException ee) {
+        }
+    return i;
 }
 ```
 
@@ -79,8 +103,24 @@ public int read(byte b[], int off, int len) throws IOException {
  *                          or if some other I/O error occurs.
  */
 public long skip(long n) throws IOException {
-    //省略实现
-    return null;
+    long remaining = n;
+        int nr;
+
+        if (n <= 0) {
+            return 0;
+        }
+
+        int size = (int)Math.min(MAX_SKIP_BUFFER_SIZE, remaining);
+        byte[] skipBuffer = new byte[size];
+        while (remaining > 0) {
+            nr = read(skipBuffer, 0, (int)Math.min(size, remaining));
+            if (nr < 0) {
+                break;
+            }
+            remaining -= nr;
+        }
+
+   return n - remaining;
 }
 ```
 
