@@ -1,0 +1,14 @@
+HttpServletBean
+
+ConfigurableEnvironment = environment =	StandardServletEnvironment  (id=66)	
+StandardServletEnvironment {
+	activeProfiles=[], 
+	defaultProfiles=[default], 
+	propertySources=[
+		servletConfigInitParams,
+		servletContextInitParams,
+		jndiProperties,
+		systemProperties,
+		systemEnvironment
+	]
+}
