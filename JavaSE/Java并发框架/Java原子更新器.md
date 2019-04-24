@@ -5,10 +5,10 @@ AtomicReferenceFieldUpdater
 newUpdater方法
 
 	public static <U,W> AtomicReferenceFieldUpdater<U,W> newUpdater(Class<U> tclass,
-                                                                    Class<W> vclass,
-                                                                    String fieldName) {
-        return new AtomicReferenceFieldUpdaterImpl<U,W>
-            (tclass, vclass, fieldName, Reflection.getCallerClass());
+	                                                                Class<W> vclass,
+	                                                                String fieldName) {
+	    return new AtomicReferenceFieldUpdaterImpl<U,W>
+	        (tclass, vclass, fieldName, Reflection.getCallerClass());
 	}
 
 compareAndSet方法
@@ -27,16 +27,18 @@ BufferedInputStream extends FilterInputStream
 
 close方法
 
-	public void close() throws IOException {
-		byte[] buffer;
-		while ( (buffer = buf) != null) {
-			if (bufUpdater.compareAndSet(this, buffer, null)) {
-				InputStream input = in;
-				in = null;
-				if (input != null)
-					input.close();
-				return;
-			}
-			// Else retry in case a new buf was CASed in fill()
+```java
+public void close() throws IOException {
+	byte[] buffer;
+	while ( (buffer = buf) != null) {
+		if (bufUpdater.compareAndSet(this, buffer, null)) {
+			InputStream input = in;
+			in = null;
+			if (input != null)
+				input.close();
+			return;
 		}
+		// Else retry in case a new buf was CASed in fill()
 	}
+}
+```
